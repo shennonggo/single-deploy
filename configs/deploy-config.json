@@ -1,0 +1,30 @@
+{
+  "projects": [
+      {
+          "name": "前端项目",
+          "path": "/path/to/frontend",
+          "type": "nodejs",
+          "gitRepo": "git@github.com:your/frontend.git",
+          "gitBranch": "main",
+          "buildCmd": "npm install && npm run build",
+          "startCmd": "pm2 restart frontend",
+          "healthCheck": {
+              "url": "http://localhost:3000/health",
+              "timeout": 30
+          }
+      },
+      {
+          "name": "后端API",
+          "path": "/path/to/backend",
+          "type": "golang",
+          "gitRepo": "git@github.com:your/backend.git",
+          "gitBranch": "main",
+          "buildCmd": "go build -o app",
+          "startCmd": "./app",
+          "healthCheck": {
+              "url": "http://localhost:8080/health",
+              "timeout": 30
+          }
+      }
+  ]
+}
