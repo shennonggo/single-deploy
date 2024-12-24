@@ -2,6 +2,7 @@ package deploy
 
 import (
 	"fmt"
+	"os"
 	"os/exec"
 
 	"jihulab.com/commontool/deployer/internal/config"
@@ -36,7 +37,12 @@ func buildProject(p config.Project) error {
 	}
 	cmd := exec.Command("sh", "-c", p.BuildCmd)
 	cmd.Dir = p.Path
-	return utils.ExecCommand(cmd)
+
+	// 设置标准输出和标准错误输出
+	cmd.Stdout = utils.NewRealTimeWriter(os.Stdout)
+	cmd.Stderr = utils.NewRealTimeWriter(os.Stderr)
+
+	return cmd.Run()
 }
 
 func startService(p config.Project) error {
