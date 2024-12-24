@@ -6,7 +6,7 @@
           "type": "nodejs",
           "gitRepo": "git@github.com:your/frontend.git",
           "gitBranch": "main",
-          "buildCmd": "npm install && npm run build",
+          "buildCmd": "npm install",
           "startCmd": "pm2 restart frontend",
           "healthCheck": {
               "url": "http://localhost:3000/health",
@@ -15,12 +15,12 @@
       },
       {
           "name": "后端API",
-          "path": "/path/to/backend",
-          "type": "golang",
-          "gitRepo": "git@github.com:your/backend.git",
-          "gitBranch": "main",
-          "buildCmd": "go build -o app",
-          "startCmd": "./app",
+          "path": "/var/www/test",
+          "type": "nodejs",
+          "gitRepo": "git@jihulab.com:catnote/note-server.git",
+          "gitBranch": "master",
+          "buildCmd": "npm install",
+          "startCmd": "npm run restart",
           "healthCheck": {
               "url": "http://localhost:8080/health",
               "timeout": 30
