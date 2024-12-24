@@ -7,7 +7,7 @@
 go mod tidy
 
 # 构建
-go build -o deployer cmd/deployer/main.go
+make all
 
 # 运行
-./deployer
+./bin/deployer
