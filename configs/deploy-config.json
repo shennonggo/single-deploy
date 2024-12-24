@@ -15,14 +15,14 @@
     },
     {
         "name": "note-web",
-        "path": "/var/www/note-web",
-        "type": "nodejs",
+        "path": "/var/www/web",
+        "type": "react",
         "gitRepo": "git@jihulab.com:catnote/note-web.git",
         "gitBranch": "master",
-        "buildCmd": "",
-        "startCmd": "pm2 restart frontend",
+        "buildCmd": "pwd && ls -l && npm install && npm run build:prod",
+        "startCmd": "supervisorctl restart web",
         "healthCheck": {
-        "url": "http://localhost:3000/health",
+        "url": "http://localhost:3000/",
         "timeout": 30
         }
     }
