@@ -23,8 +23,21 @@
         "startCmd": "supervisorctl restart web",
         "healthCheck": {
         "url": "http://localhost:3000/",
-        "timeout": 30
+        "timeout": 10
         }
-    }
+    },
+    {
+      "name": "note-doc",
+      "path": "/var/www/doc",
+      "type": "docsify",
+      "gitRepo": "git@jihulab.com:catnote/note-doc.git",
+      "gitBranch": "master",
+      "buildCmd": "pwd",
+      "startCmd": "ls -l",
+      "healthCheck": {
+      "url": "http://localhost:3010/",
+      "timeout": 10
+      }
+  }
   ]
 }
