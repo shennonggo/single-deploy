@@ -1,30 +1,30 @@
 {
   "projects": [
-      {
-          "name": "前端项目",
-          "path": "/path/to/frontend",
-          "type": "nodejs",
-          "gitRepo": "git@github.com:your/frontend.git",
-          "gitBranch": "main",
-          "buildCmd": "npm install",
-          "startCmd": "pm2 restart frontend",
-          "healthCheck": {
-              "url": "http://localhost:3000/health",
-              "timeout": 30
-          }
-      },
-      {
-          "name": "后端API",
-          "path": "/var/www/test",
-          "type": "nodejs",
-          "gitRepo": "git@jihulab.com:catnote/note-server.git",
-          "gitBranch": "master",
-          "buildCmd": "npm install",
-          "startCmd": "npm run restart",
-          "healthCheck": {
-              "url": "http://localhost:8080/health",
-              "timeout": 30
-          }
-      }
+    {
+        "name": "note-server",
+        "path": "/var/www/server",
+        "type": "nodejs",
+        "gitRepo": "git@jihulab.com:catnote/note-server.git",
+        "gitBranch": "master",
+        "buildCmd": "pwd && ls -l && npm install && cp -rf /var/www/config/server/config.prod.ts ./config/ && cp -rf /var/www/certs/* ./",
+        "startCmd": "npm run stop2 && npm run start2",
+        "healthCheck": {
+            "url": "http://localhost:7002/ping/health",
+            "timeout": 10
+        }
+    },
+    {
+        "name": "note-web",
+        "path": "/var/www/note-web",
+        "type": "nodejs",
+        "gitRepo": "git@jihulab.com:catnote/note-web.git",
+        "gitBranch": "master",
+        "buildCmd": "",
+        "startCmd": "pm2 restart frontend",
+        "healthCheck": {
+        "url": "http://localhost:3000/health",
+        "timeout": 30
+        }
+    }
   ]
 }
