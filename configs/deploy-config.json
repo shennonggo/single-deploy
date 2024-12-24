@@ -7,7 +7,7 @@
         "gitRepo": "git@jihulab.com:catnote/note-server.git",
         "gitBranch": "master",
         "buildCmd": "pwd && ls -l && npm install && cp -rf /var/www/config/server/config.prod.ts ./config/ && cp -rf /var/www/certs/* ./",
-        "startCmd": "npm run stop2 && npm run start2",
+        "startCmd": "npm run stop && npm run start && npm run stop2 && npm run start2",
         "healthCheck": {
             "url": "http://localhost:7002/ping/health",
             "timeout": 10
