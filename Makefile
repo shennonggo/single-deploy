@@ -1,6 +1,5 @@
 # 基础变量定义
 BINARY_NAME=deployer
-BINARY_DIR=bin
 MAIN_FILE=cmd/deployer/main.go
 
 # 版本信息
@@ -28,21 +27,15 @@ LDFLAGS=-ldflags "\
 .PHONY: all
 all: clean build
 
-# 创建构建目录
-.PHONY: init
-init:
-	@mkdir -p ${BINARY_DIR}
-
 # 清理构建文件
 .PHONY: clean
 clean:
 	@echo "清理构建文件..."
-	@rm -rf ${BINARY_DIR}
 	@go clean
 
 # 构建应用
 .PHONY: build
-build: init
+build:
 	@echo "开始构建..."
 	@echo "GOOS: ${GOOS}"
 	@echo "GOARCH: ${GOARCH}"
@@ -52,5 +45,5 @@ build: init
 	@echo "GitBranch: ${GIT_BRANCH}"
 	@GOOS=${GOOS} GOARCH=${GOARCH} CGO_ENABLED=${CGO_ENABLED} \
 		${GO} build ${LDFLAGS} \
-		-o ${BINARY_DIR}/${BINARY_NAME} ${MAIN_FILE}
-	@echo "构建完成: ${BINARY_DIR}/${BINARY_NAME}"
+		-o ./${BINARY_NAME} ${MAIN_FILE}
+	@echo "构建完成: ./${BINARY_NAME}"
