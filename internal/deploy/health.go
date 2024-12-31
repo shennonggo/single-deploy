@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"time"
 
-	"jihulab.com/commontool/deployer/internal/config"
+	"github.com/shennonggo/single-deploy/internal/config"
 )
 
 func healthCheck(p config.Project) error {
@@ -24,7 +24,7 @@ func healthCheck(p config.Project) error {
 	for {
 		select {
 		case <-ctx.Done():
-			return fmt.Errorf("健康检查超时")
+			return fmt.Errorf("health check timeout")
 		case <-ticker.C:
 			if err := checkEndpoint(p.HealthCheck.URL); err == nil {
 				return nil
@@ -41,7 +41,7 @@ func checkEndpoint(url string) error {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("健康检查失败，状态码: %d", resp.StatusCode)
+		return fmt.Errorf("health check failed, status code: %d", resp.StatusCode)
 	}
 	return nil
 }

@@ -6,12 +6,12 @@ import (
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/briandowns/spinner"
-	"jihulab.com/commontool/deployer/internal/config"
-	"jihulab.com/commontool/deployer/internal/utils"
+	"github.com/shennonggo/single-deploy/internal/config"
+	"github.com/shennonggo/single-deploy/internal/utils"
 )
 
 func Start(configPath string) error {
-	// 加载配置
+	// Load configuration
 	cfg, err := config.LoadConfig(configPath)
 	if err != nil {
 		return err
@@ -21,17 +21,17 @@ func Start(configPath string) error {
 		return err
 	}
 
-	// 选择项目
+	// Select project
 	project, err := selectProject(cfg.Projects)
 	if err != nil {
 		return err
 	}
 
-	// 创建spinner
+	// Create spinner
 	s := spinner.New(spinner.CharSets[11], 100*time.Millisecond)
 	s.Prefix = "🚀 "
 
-	// 执行部署步骤
+	// Execute deployment steps
 	steps := GetDeploySteps()
 	for _, step := range steps {
 		s.Suffix = fmt.Sprintf(" %s...", step.Name)
@@ -39,14 +39,14 @@ func Start(configPath string) error {
 
 		if err := step.Execute(project); err != nil {
 			s.Stop()
-			return fmt.Errorf("%s失败: %v", step.Name, err)
+			return fmt.Errorf("%s failed: %v", step.Name, err)
 		}
 
 		s.Stop()
-		utils.LogSuccess("%s 完成", step.Name)
+		utils.LogSuccess("%s completed", step.Name)
 	}
 
-	utils.LogSuccess("项目 %s 部署成功！", project.Name)
+	utils.LogSuccess("Project %s deployed successfully!", project.Name)
 	return nil
 }
 
@@ -61,7 +61,7 @@ func selectProject(projects []config.Project) (config.Project, error) {
 	}
 
 	prompt := &survey.Select{
-		Message: "请选择要部署的项目:",
+		Message: "Please select the project to deploy:",
 		Options: options,
 	}
 

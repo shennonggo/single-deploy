@@ -1,43 +1,30 @@
 {
   "projects": [
     {
-        "name": "note-server",
-        "path": "/var/www/server",
-        "type": "nodejs",
-        "gitRepo": "git@jihulab.com:catnote/note-server.git",
-        "gitBranch": "master",
-        "buildCmd": "pwd && ls -l && npm install && cp -rf /var/www/config/server/config.prod.ts ./config/ && cp -rf /var/www/certs/* ./",
-        "startCmd": "npm run stop && npm run start && npm run stop2 && npm run start2",
-        "healthCheck": {
-            "url": "http://localhost:7002/ping/health",
-            "timeout": 10
-        }
-    },
-    {
-        "name": "note-web",
-        "path": "/var/www/web",
-        "type": "react",
-        "gitRepo": "git@jihulab.com:catnote/note-web.git",
-        "gitBranch": "master",
-        "buildCmd": "pwd && ls -l && npm install && npm run build:prod",
-        "startCmd": "supervisorctl restart web",
-        "healthCheck": {
-        "url": "http://localhost:3000/",
-        "timeout": 10
-        }
-    },
-    {
-      "name": "note-doc",
-      "path": "/var/www/doc",
-      "type": "docsify",
-      "gitRepo": "git@jihulab.com:catnote/note-doc.git",
-      "gitBranch": "master",
-      "buildCmd": "pwd",
-      "startCmd": "ls -l",
+      "name": "my-frontend",
+      "path": "./projects/frontend",
+      "type": "react",
+      "gitRepo": "https://github.com/username/frontend-app.git",
+      "gitBranch": "main",
+      "buildCmd": "npm install && npm run build",
+      "startCmd": "npm start",
       "healthCheck": {
-      "url": "http://localhost:3010/",
-      "timeout": 10
+        "url": "http://localhost:3000",
+        "timeout": 30
       }
-  }
+    },
+    {
+      "name": "my-backend",
+      "path": "./projects/backend",
+      "type": "golang",
+      "gitRepo": "https://github.com/username/backend-service.git",
+      "gitBranch": "main",
+      "buildCmd": "go mod download && go build -o app",
+      "startCmd": "./app",
+      "healthCheck": {
+        "url": "http://localhost:8080/health",
+        "timeout": 60
+      }
+    }
   ]
 }

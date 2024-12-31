@@ -3,22 +3,22 @@ package deploy
 import (
 	"os/exec"
 
-	"jihulab.com/commontool/deployer/internal/config"
-	"jihulab.com/commontool/deployer/internal/utils"
+	"github.com/shennonggo/single-deploy/internal/config"
+	"github.com/shennonggo/single-deploy/internal/utils"
 )
 
 func pullCode(p config.Project) error {
 	if p.GitRepo == "" {
-		return nil // 如果没有配置 git 仓库，跳过
+		return nil // Skip if git repository is not configured
 	}
 
-	// 检查目录是否存在
+	// Check if directory exists
 	if !utils.DirExists(p.Path) {
-		// 如果目录不存在，执行 clone
+		// If directory doesn't exist, execute clone
 		return gitClone(p)
 	}
 
-	// 如果目录存在，执行 pull
+	// If directory exists, execute pull
 	return gitPull(p)
 }
 

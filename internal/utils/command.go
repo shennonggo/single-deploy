@@ -14,7 +14,7 @@ func ExecCommand(cmd *exec.Cmd) error {
 
 	err := cmd.Run()
 	if err != nil {
-		return fmt.Errorf("执行命令失败: %v\n输出: %s\n错误: %s",
+		return fmt.Errorf("command execution failed: %v\nOutput: %s\nError: %s",
 			err, stdout.String(), stderr.String())
 	}
 

@@ -5,8 +5,8 @@ import (
 	"os"
 	"os/exec"
 
-	"jihulab.com/commontool/deployer/internal/config"
-	"jihulab.com/commontool/deployer/internal/utils"
+	"github.com/shennonggo/single-deploy/internal/config"
+	"github.com/shennonggo/single-deploy/internal/utils"
 )
 
 type DeployStep struct {
@@ -16,17 +16,17 @@ type DeployStep struct {
 
 func GetDeploySteps() []DeployStep {
 	return []DeployStep{
-		{"拉取代码", pullCode},
-		{"检查环境", checkEnvironment},
-		{"构建项目", buildProject},
-		{"启动服务", startService},
-		{"健康检查", healthCheck},
+		{"Pull Code", pullCode},
+		{"Check Environment", checkEnvironment},
+		{"Build Project", buildProject},
+		{"Start Service", startService},
+		{"Health Check", healthCheck},
 	}
 }
 
 func checkEnvironment(p config.Project) error {
 	if !utils.DirExists(p.Path) {
-		return fmt.Errorf("项目目录不存在: %s", p.Path)
+		return fmt.Errorf("project directory does not exist: %s", p.Path)
 	}
 	return nil
 }
@@ -38,7 +38,7 @@ func buildProject(p config.Project) error {
 	cmd := exec.Command("sh", "-c", p.BuildCmd)
 	cmd.Dir = p.Path
 
-	// 设置标准输出和标准错误输出
+	// Set up standard output and standard error output
 	cmd.Stdout = utils.NewRealTimeWriter(os.Stdout)
 	cmd.Stderr = utils.NewRealTimeWriter(os.Stderr)
 

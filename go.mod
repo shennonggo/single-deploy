@@ -1,4 +1,4 @@
-module jihulab.com/commontool/deployer
+module github.com/shennonggo/single-deploy
 
 go 1.21.6
 

@@ -1,20 +1,19 @@
-# 基础变量定义
-BINARY_NAME=deployer
-MAIN_FILE=cmd/deployer/main.go
+# Basic variable definitions
+BINARY_NAME=single-deploy
+MAIN_FILE=cmd/single-deploy/main.go
+GO=go
+CGO_ENABLED=0
+CONFIG_DIR=configs
+BUILD_DIR=build
+BUILD_CONFIG_DIR=build/configs
 
-# 版本信息
+# Version information
 VERSION=$(shell git describe --tags --always || echo "unknown")
 BUILD_TIME=$(shell date "+%F %T")
 GIT_COMMIT=$(shell git rev-parse --short HEAD || echo "unknown")
 GIT_BRANCH=$(shell git rev-parse --abbrev-ref HEAD || echo "unknown")
 
-# Go 构建标记
-GO=go
-GOOS=linux
-GOARCH=amd64
-CGO_ENABLED=0
-
-# 构建标记
+# Build flags
 LDFLAGS=-ldflags "\
 	-w -s \
 	-X 'main.Version=${VERSION}' \
@@ -23,27 +22,44 @@ LDFLAGS=-ldflags "\
 	-X 'main.GitBranch=${GIT_BRANCH}' \
 "
 
-# 默认目标
-.PHONY: all
-all: clean build
+# Platform specific builds
+.PHONY: build-all
+build-all: build-linux build-windows build-darwin
 
-# 清理构建文件
+.PHONY: build-linux
+build-linux:
+	@echo "Building for Linux..."
+	@mkdir -p ${BUILD_CONFIG_DIR}
+	@cp -r ${CONFIG_DIR}/* ${BUILD_CONFIG_DIR}/
+	@GOOS=linux GOARCH=amd64 CGO_ENABLED=${CGO_ENABLED} \
+		${GO} build ${LDFLAGS} \
+		-o ${BUILD_DIR}/${BINARY_NAME}-linux-amd64 ${MAIN_FILE}
+	@echo "Linux build complete"
+
+.PHONY: build-windows
+build-windows:
+	@echo "Building for Windows..."
+	@mkdir -p ${BUILD_CONFIG_DIR}
+	@cp -r ${CONFIG_DIR}/* ${BUILD_CONFIG_DIR}/
+	@GOOS=windows GOARCH=amd64 CGO_ENABLED=${CGO_ENABLED} \
+		${GO} build ${LDFLAGS} \
+		-o ${BUILD_DIR}/${BINARY_NAME}-windows-amd64.exe ${MAIN_FILE}
+	@echo "Windows build complete"
+
+.PHONY: build-darwin
+build-darwin:
+	@echo "Building for macOS..."
+	@mkdir -p ${BUILD_CONFIG_DIR}
+	@cp -r ${CONFIG_DIR}/* ${BUILD_CONFIG_DIR}/
+	@GOOS=darwin GOARCH=amd64 CGO_ENABLED=${CGO_ENABLED} \
+		${GO} build ${LDFLAGS} \
+		-o ${BUILD_DIR}/${BINARY_NAME}-darwin-amd64 ${MAIN_FILE}
+	@echo "macOS build complete"
+
+# Update clean target
 .PHONY: clean
 clean:
-	@echo "清理构建文件..."
+	@echo "Cleaning build files..."
 	@go clean
-
-# 构建应用
-.PHONY: build
-build:
-	@echo "开始构建..."
-	@echo "GOOS: ${GOOS}"
-	@echo "GOARCH: ${GOARCH}"
-	@echo "Version: ${VERSION}"
-	@echo "BuildTime: ${BUILD_TIME}"
-	@echo "GitCommit: ${GIT_COMMIT}"
-	@echo "GitBranch: ${GIT_BRANCH}"
-	@GOOS=${GOOS} GOARCH=${GOARCH} CGO_ENABLED=${CGO_ENABLED} \
-		${GO} build ${LDFLAGS} \
-		-o ./${BINARY_NAME} ${MAIN_FILE}
-	@echo "构建完成: ./${BINARY_NAME}"
+	@rm -rf ${BUILD_DIR}
+	@mkdir -p ${BUILD_DIR}

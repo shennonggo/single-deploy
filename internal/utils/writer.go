@@ -18,7 +18,7 @@ func (w *RealTimeWriter) Write(p []byte) (n int, err error) {
 	if err != nil {
 		return n, err
 	}
-	// 确保立即刷新输出
+	// Ensure immediate output flush
 	if f, ok := w.w.(*os.File); ok {
 		f.Sync()
 	}
